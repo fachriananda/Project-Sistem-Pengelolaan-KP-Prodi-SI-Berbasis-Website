@@ -1,7 +1,6 @@
 <?php
-
-$query = mysql_query("SELECT DISTINCT program_studi FROM bimbingankp");
-$query2 = mysql_query("SELECT DISTINCT semester_mulai_kp FROM bimbingankp");
+$nama_dosen = $_SESSION['nama_do'];
+$query = mysql_query("SELECT DISTINCT nama_lengkap FROM bimbingankp WHERE dosen_pembimbing = '$nama_dosen'");
 
 ?>
 <section class="content-header">
@@ -16,19 +15,14 @@ $query2 = mysql_query("SELECT DISTINCT semester_mulai_kp FROM bimbingankp");
     <div class="container">
         <div class="row">
             <div class="col">
-                <h3>Masukkan Filter : </h3>
+                <h3>Pilih Mahasiswa : </h3>
                 <form class="form-inline" action="modular/pdf.php" method="GET">
                     <div class="form-group">
-                        <select name="program_studi" class="form-control">
-                            <option selected value=""></option>
+                        <select name="nama" class="form-control">
                             <?php while ($data = mysql_fetch_assoc($query)) : ?>
-                                <option value="<?= $data['program_studi']; ?>"><?= $data['program_studi']; ?></option>
-                            <?php endwhile; ?>
-                        </select>
-                        <select name="semester_mulai_kp" class="form-control">
-                            <option selected value=""></option>
-                            <?php while ($data2 = mysql_fetch_assoc($query2)) : ?>
-                                <option value="<?= $data2['semester_mulai_kp']; ?>"><?= $data2['semester_mulai_kp']; ?></option>
+                                <a href="modular/pdf.php?nama=" <?= $data['nama_lengkap']; ?>>
+                                    <option value="<?= $data['nama_lengkap']; ?>"><?= $data['nama_lengkap']; ?></option>
+                                </a>
                             <?php endwhile; ?>
                         </select>
                     </div>

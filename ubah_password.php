@@ -1,10 +1,10 @@
 
 <?php
-    session_start();
-    $ID = $_SESSION['username'];
-    $passlama= $_SESSION['password'];
-?>
+session_start();
+$ID = $_SESSION['username'];
+$passlama= $_SESSION['password'];
 
+?>
 <section class="content-header">      
     <h1> Ubah Password</h1>
     <ol class="breadcrumb">
@@ -22,9 +22,9 @@
                     <!-- form start -->
                     <form method="post" role="form">
                         <div class="box-body">
-                            <!-- form nama lengkap-->
+                            <!-- form password-->
                             <div class="form-group">
-                                <label>Password Baru</label>   
+                                <label>Password Baru</label> 
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-key"></i>
@@ -61,8 +61,7 @@
                             echo "<script language='javascript'>alert('password konfirmasi berbeda');document.location='homepage.php?p=ubah_password';</script>"; 
                         }
                         if (isset($_POST[simpan])) {
-                        
-                            $q = mysql_query("UPDATE dosen SET password='$password' WHERE nidn = '$ID' ");
+                            $q = mysql_query("UPDATE dosen SET password ='$password' WHERE nidn = '$ID' ");
                             if($q){
                                 echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=dashboard';</script>";
                             }
