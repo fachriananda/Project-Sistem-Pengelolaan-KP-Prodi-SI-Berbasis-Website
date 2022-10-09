@@ -1,8 +1,36 @@
+<?php include '../config/koneksi.php'; ?>
+<?php session_start(); 
+$ID = $_SESSION['username'];
+$query4 = mysql_query("SELECT * FROM pengajuan WHERE nim = $ID AND jenis_laporan = 'kp' AND status = '1'");
+$hasil4 = mysql_fetch_assoc($query4);
+
+if (mysql_num_rows($query4) < 1) {
+    echo "<script language='javascript'>alert('Halaman ini dapat diakses setelah proposal diterima');document.location='homepage.php';</script>";
+}
+
+
+?>
+
+<?php
+setlocale(LC_ALL, 'IND');
+
+$ID = $_SESSION['username'];
+$sql = mysql_query("SELECT * FROM mahasiswa WHERE nim = '$ID'");
+$data = mysql_fetch_array($sql);
+
+$sql2 = mysql_query("SELECT * FROM pengajuan2");
+$data2 = mysql_fetch_array($sql);
+
+
+?>
+ 
+    
+  
 <section class="content-header">      
-    <h1>Nilai Mahasiswa Dari Instasi </h1>
+    <h1> Tempat Pengumpulan Akhir Laporan KP </h1>
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Nilai Mahasiswa Dari Instasi</li>
+        <li class="active"> Tempat Pengumpulan Akhir Laporan KP</li>
     </ol>
 </section>
 
@@ -11,107 +39,101 @@
     <!-- quick email widget -->
     <div class="box box-info">            
         <div class="box-header">
-            <div class="row-fluid" style="overflow:auto">
-                <div class="col-md-8"></div>
-
-                <?php
-                    $sql =  "SELECT  * FROM pengajuan3 ";
-                    $result = mysql_query($sql);
-                    $no_urut = 1;
-                ?>
-                
-                <table id="myTable" class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>NIP</th>
-                            <th>Nama Lengkap</th>
-                            <th>Jenis Kegiatan</th>
-                            <th>file Untuk Prodi dari Instasi</th>
-                            <th>Tanggal Input</th>
-                            <th>Download</th>
+            <div class="row-fluid">
+                <div class="col-md-8">
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                                <label>NIM</label>
+                                <input class="form-control" name="nim" value="<?php echo $data['nim']; ?>" readonly>
+                            </div>
+                            <!-- form nama lengkap -->
+                            <div class="form-group">
+                                <label for="nama">Nama Lengkap</label>
+                                <input class="form-control" name="nama_lengkap" value="<?php echo $data['nama_lengkap']; ?>" readonly>
+                            </div>
                           
-                        </tr>
-                    </thead>                                                             
-                    <tbody>
-                <!-- form tahun ajaran-->
-                <!-- <form role="form" method="POST" action="" enctype="">
-                    <div class="form-group">                        
-                        <label for="ajara">DATA SEMESTER</label>
-                        <select class="form-control" name="thn" id="thn" required>
-                                <option value="">Pilih Semester</option>
-                                <option value="2018/2019">SEMESTER GASAL  2018/2019</option>
-                                <option value="2018/2019">SEMESTER GENAP  2018/2019</option>
-                                <option value="2019/2020">SEMESTER GASAL  2019/2020</option>
-                                <option value="2019/2020">SEMESTER GENAP  2019/2020</option>        
-                                <option value="2020/2021">SEMESTER GASAL  2020/2021</option>
-                                <option value="2020/2021">SEMESTER GENAP  2020/2021</option>
-                                <option value="2021/2022">SEMESTER GASAL  2021/2022</option>
-                                <option value="2021/2022">SEMESTER GENAP  2021/2022</option>
-                                <option value="2022/2023">SEMESTER GASAL  2022/2023</option>
-                                <option value="2022/2023">SEMESTER GENAP  2022/2023</option>
-                                <option value="2023/2024">SEMESTER GASAL  2023/2024</option>
-                                <option value="2023/2024">SEMESTER GENAP  2023/2024</option>
-                        </select>                    
-                    </div>                     
-                </form> -->
-                <!-- Filter per semester -->
+
+                            <div class="form-group">
+                                <label>Jenis Kegiatan</label>
+                                <div class="radio" name="jenis_laporan" required>
+                                    <p><label><input type="radio" name="jenis_laporan" value="kp">Kerja Praktek</label></p>
+                                   
+                                </div>
+                            </div>
+  
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">File Laporan</label>
+                                <input type="file" id="exampleInputFile" name="fupload" required>
+                                <p class="help-block">Format Laporan : nim_namalaporan.pdf || Size Maksimal File 10 MB</p>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
+                            </div>
+                    </form>
               
-                <!-- Filter per semester -->
-                                 
-                        <?php
-                            while ($data = mysql_fetch_array($result)) {
-                        ?>                       
+                           <?php
+                    $nim = trim($_POST['nim']);
+                    $nama_lengkap = trim($_POST['nama_lengkap']);
+                 $jenis_laporan=trim($_POST['jenis_laporan']);
+         
+          $tgl_input=date('Y-m-d');
 
-                        <tr>
-                            <td align="center"><?php echo $no_urut; ?>.</td>
-                            <td><?php echo $data ['nidn']; ?></td>
-                            <td><?php echo $data ['nama_lengkap']; ?></td>
-                            <td><?php echo $data ['jenis_laporan']; ?></td>
-                            </td>
-                            <td>
-                            <?php echo $data ['file4']; ?>
-                            </td>	
-                            <td><?php echo $data ['tgl_input']; ?></td>
+                    // $jenis_laporan= ucwords($_POST['jenis_laporan']);
+                    // $lokasi_file    = $_FILES['fupload']['tmp_name'];
+                    // $nama_file      = $_FILES['fupload']['name'];
+                    // move_uploaded_file($lokasi_file,"file/$nama_file");
+                    // $status = "New";
+                    $lokasi_file    = $_FILES['fupload']['tmp_name'];
+                    $nama_file      = $_FILES['fupload']['name'];
+                    $ukuran_file    = $_FILES['fupload']['size'];
+                    $ekstensi_diperbolehkan    = 'pdf';
+                    $x = explode('.', $nama_file);
+                    $ekstensi = strtolower(end($x));
+                    move_uploaded_file($lokasi_file, "file/$nama_file");
 
-                                <td><?php echo " <a href='../mahasiswa/file/$data[file4]'>";?>
-                                <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='Download File'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button></a>                               
-                              </td>                        
-                             
-                    
-                             
-                                                                         
-                               
-                        </tr>
-                        <?php
-                            $no_urut++;
+                    // 10MB
+                    $size = 10000000;
+                    // $status = trim ($_POST['status']);
+                    // $status = 'Baru';
+
+                    if (isset($_POST['simpan'])) {
+                        if ($ekstensi != $ekstensi_diperbolehkan) {
+                            echo "<script>alert('Nama Ekstensi Tidak Diperbolehkan');</script>";
+                        } elseif ($ekstensi == $ekstensi_diperbolehkan) {
+                            if ($ukuran_file > $size) {
+                                echo "<script language='javascript'>alert('Ukuran file terlalu besar');document.location='homepage.php?p=index00';</script>";
+                            } else if ($ukuran_file < $size) {
+                                $q = mysql_query("INSERT INTO pengajuan4 (nim,nama_lengkap,file5,jenis_laporan,tgl_input) VALUES ('$nim','$nama_lengkap','$nama_file','$jenis_laporan','$tgl_input')");
+                                if (mysql_affected_rows($connect) > 0) {
+                                    echo "<script language='javascript'>alert('Laporan Anda Berhasil Diajukan');document.location='homepage.php?p=index00';</script>";
+                                } else {
+                                    // echo "<script language='javascript'>alert('Laporan Anda Gagal Diajukan');document.location='homepage.php?p=bimbingan_kp';</script>";
+                                    echo mysql_error($connect);
+                                }
+                            }
                         }
-                        ?>  
-                    </tbody>
-                </table>
-                    
-             
-               
-               <!--  <div class="box-footer">   -->
-                <form role="form" method="POST" action="" enctype="multipart/form-data">      
-                
-                </form>
-                <!-- </div> -->                
-                 <br>
-                 <br>
-                 <?php
-                   
+                    }
 
-                ?>
-
-<?php
-
- ?>
-      <br>
-    <br>                          
+                    ?>   
+                 
+                </div>
             </div>
         </div>
     </div>
 <!-- /.row (main row) -->
-</section>  
+</section>    
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="../bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script>
+    // $('.datepicker').datepicker();
+    // $('.datepicker').on('changeDate', function(ev){
+    //     $(this).datepicker('hide');
+    // });
+    $('.datepicker').datepicker({
+        format: 'dd-mm-yyyy'
+    });
+</script>
