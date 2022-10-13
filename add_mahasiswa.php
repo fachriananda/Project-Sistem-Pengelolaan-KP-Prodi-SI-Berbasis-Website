@@ -1,10 +1,10 @@
 <?php include '../config/koneksi.php'; ?>
 
 <section class="content-header">      
-    <h1> Tambah Dosen</h1>
+    <h1> Tambah Mahasiswa</h1>
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Tambah Dosen</li>
+        <li class="active">Tambah Mahasiswa</li>
     </ol>
 </section>
 
@@ -18,10 +18,10 @@
                     <!-- form start -->
                     <form method="POST" enctype="multipart/form-data">
                         <div class="box-body">
-                            <!-- form nidn-->
-                           <div class="form-group">
-                                <label>NIP</label>
-                                <input type="text" class="form-control" id="nidn" placeholder="0601067503" name="nidn" required>
+                            <!-- form nim-->
+                            <div class="form-group">
+                                <label>NIM</label>
+                                <input type="text" class="form-control" id="nim" placeholder="222120004" name="nim" required>
                             </div>
                             <!-- form nama lengkap-->
                             <div class="form-group">
@@ -46,15 +46,18 @@
                                     <input type="text" class="form-control" placeholder="masukkan email" id="email" name="email" required>
                                 </div>
                             </div>
-                            <!-- form jabatan fungsional-->
+                            <!-- form program studi-->
                             <div class="form-group">
-                                <label>Jabatan Fungsional</label>
-                                <input type="text" class="form-control" id="jf" placeholder="masukkan jabatan fungsional" name="jf">
-                            </div>
-                            <!-- form jabatan struktural-->
-                            <div class="form-group">
-                                <label>Jabatan Struktural</label>
-                                <input type="text" class="form-control" id="js" placeholder="masukkan jabatan struktural" name="js">
+                                <label>Program Studi</label>
+                                <select class="form-control" name="prodi" required>
+                                <option selected>Pilih Program Studi</option>
+                                   <?php
+                                        $qsp = mysql_query("SELECT * FROM prodi");
+                                        while ($s=mysql_fetch_array($qsp)) {
+                                        echo "<option value='$s[prodi]'>$s[prodi]</option>";
+                                        }
+                                    ?>
+                                </select>
                             </div>
                             <!-- form username-->
                             <div class="form-group">
@@ -76,16 +79,6 @@
                                     <input type="password" class="form-control" placeholder="password" id="password" name="password" required>
                                 </div>
                             </div>
-                            <!-- form level-->
-                            <div class="form-group">
-                                <label>Level</label>
-                                <select class="form-control" name="level" required>
-                                    <option selected>Pilih Level</option>
-                                    <option value="d">Dekan</option>
-                                    <option value="k">Kaprodi</option>
-                                    <option value="do">Dosen</option>
-                                </select>
-                            </div>
                             <!-- form foto-->
                             <div class="form-group">
                                 <label>Foto</label>
@@ -104,31 +97,30 @@
                                 </div>
                                 <p class="help-block">Ukuran gambar jangan lebih dari 100kb</p>
                             </div>
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button type="submit" name="simpan" class="btn btn-primary"><i class="fa fa-check"></i> simpan</button>
-                        <a class="btn btn-primary" href="homepage.php?p=data_dosen"><i class="fa fa-mail-reply"></i> batal </a>
-                    </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="submit" name="simpan" class="btn btn-primary"><i class="fa fa-check"></i> simpan</button>
+                                <a class="btn btn-primary" href="homepage.php?p=data_mahasiswa"><i class="fa fa-mail-reply"></i> batal </a>
+                            </div>
+                        </div>
                     </form>
                     <?php
-                        $x1 = trim ($_POST['nidn']);
+                        $x1 = trim ($_POST['nim']);
                         $x2 = trim ($_POST['nama']);
                         $x3 = trim ($_POST['jenis_kelamin']);
                         $x4 = trim ($_POST['email']);
-                        $x5 = trim ($_POST['jf']);
-                        $x6 = trim ($_POST['js']);
-                        $x7 = trim ($_POST['username']);
-                        $x8 = trim ($_POST['level']);
+                        $x5 = trim ($_POST['prodi']);
+                        $x6 = trim ($_POST['username']);
                         $lokasi_file    = $_FILES['fupload']['tmp_name'];
                         $nama_file      = $_FILES['fupload']['name'];
                         $ukuran_file    = $_FILES['fupload']['size'];
                         move_uploaded_file($lokasi_file,"foto/$nama_file");
                         $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
                         $size = 100000;
-                        
+                            
                         if (isset($_POST[simpan])) {
                             
-                            $cekSql = mysql_query("SELECT * from dosen where nidn = '$x1'");
+                            $cekSql = mysql_query("SELECT * from mahasiswa where nim = '$x1'");
                             if($ukuran_file > $size)
                                 {
                                     echo "<strong>Gagal upload! <br>Ukuran Maksimal 100kb, saat ini ukuran file ".$ukuran_file."</strong>";
@@ -140,16 +132,17 @@
                                 }
                             else 
                                 {
-                                    $q = mysql_query("INSERT INTO dosen (nidn,nama_lengkap,jenis_kelamin,email,jabatan_fungsional,jabatan_Struktural,foto,username,password,level)
-                                    VALUES ('$x1','$x2','$x3','$x4','$x5','$x6','$nama_file','$x7','$pass','$x8')");
+                                    $q = mysql_query("INSERT INTO mahasiswa (nim,nama_lengkap,jenis_kelamin,email,program_studi,foto,username,password,level)
+                                    VALUES ('$x1','$x2','$x3','$x4','$x5','$nama_file','$x6','$pass','m')");
                                 }
                             if($q)
                                 {
-                                    echo "<script language='javascript'>alert('Data Berhasil Ditambahkan');document.location='homepage.php?p=data_dosen';</script>";
+                                    echo "<script language='javascript'>alert('Data Berhasil Ditambahkan');document.location='homepage.php?p=data_mahasiswa';</script>";
                                 }
                             else
                                 {
-                                    echo "<script language='javascript'>alert('Data Gagal Ditambahkan');document.location='homepage.php?p=add_dosen';</script>"; 
+                                    echo "<script language='javascript'>alert('Data Gagal Ditambahkan');document.location='homepage.php?p=add_mahasiswa';</script>"; 
+									//echo mysql_error($connect);
                                 }
                         }
                     ?>

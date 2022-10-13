@@ -2,26 +2,25 @@
 
 <?php 
     $ID =$_GET['ubah'];
-    $sql = mysql_query("SELECT * FROM dosen WHERE nidn = '$ID'");
+    $sql = mysql_query("SELECT * FROM mahasiswa WHERE nim = '$ID'");
     $data=mysql_fetch_array($sql);
 
-    $nidn=$data['nidn'];
+    $nim=$data['nim'];
     $nama=$data['nama_lengkap'];
     $kelamin=$data['jenis_kelamin'];
     $email=$data['email'];
+    $prodi=$data['program_studi'];
     $foto=$data['foto'];
-    $jf=$data['jabatan_fungsional'];
-    $js=$data['jabatan_struktural'];
     $level=$data['level'];
     $username=$data['username'];
     $passlama=$data['password'];
 ?>
 
 <section class="content-header">      
-    <h1> Edit Dosen</h1>
+    <h1> Edit Mahasiswa</h1>
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Edit Dosen</li>
+        <li class="active">Edit Mahasiswa</li>
     </ol>
 </section>
 
@@ -37,8 +36,8 @@
                         <div class="box-body">
                             <!-- form NIM-->
                             <div class="form-group">
-                                <label>NIDN</label>
-                                <input type="text" class="form-control" id="nidn" placeholder="0601067503" name="nidn" value="<?php echo "$nidn";?>" readonly>
+                                <label>NIM</label>
+                                <input type="text" class="form-control" id="nim" placeholder="222120004" name="nim" value="<?php echo "$nim";?>" readonly>
                             </div>
                             <!-- form nama lengkap-->
                             <div class="form-group">
@@ -58,15 +57,22 @@
                                 <label>Email</label>
                                 <input type="text" class="form-control" id="email" placeholder="masukkan email" name="email" value="<?php echo "$email";?>" required>
                             </div>
-                            <!-- form jabatan fungsional-->
+                            <!-- form prodi-->
                             <div class="form-group">
-                                <label>Jabatan Fungsional</label>
-                                <input type="text" class="form-control" id="jf" placeholder="masukkan jabatan fungsional" name="jf" value="<?php echo "$jf";?>">
-                            </div>
-                            <!-- form jabatan struktural-->
-                            <div class="form-group">
-                                <label>Jabatan Struktural</label>
-                                <input type="text" class="form-control" id="js" placeholder="masukkan jabatan struktural" name="js" value="<?php echo "$js";?>">
+                                <label>Program Studi</label>
+                                <select class="form-control" name="prodi" required>
+                                <option selected>Pilih Program Studi</option>
+                                <?php
+                                        $qsp = mysql_query("SELECT * FROM prodi");
+                                        while ($s=mysql_fetch_array($qsp)) {
+                                            if ($s[prodi]==$data[program_studi]){
+                                                echo "<option value='$s[prodi]' selected>$s[prodi]</option>";
+                                            } else {
+                                                echo "<option value='$s[prodi]'>$s[prodi]</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
                             </div>
                             <!-- form username-->
                             <div class="form-group">
@@ -92,15 +98,6 @@
                                     <input class="form-control" id="repass" name="repass" type="password" placeholder="Konfirmasi password">
                                 </div>
                             </div>
-                            <!--form level-->
-                            <div class="form-group">
-                                <label>Level</label>
-                                <select class="form-control" name="level" required>
-                                    <option selected>Pilih Level</option>
-                                
-                                    <option value="do">Dosen</option>
-                                </select>
-                            </div>
                             <!-- form foto-->
                             <div class="form-group">
                                 <label>Foto</label>
@@ -123,18 +120,16 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" name="simpan" class="btn btn-primary"><i class="fa fa-check"></i> simpan</button>
-                        <a class="btn btn-primary" href="homepage.php?p=data_dosen"><i class="fa fa-mail-reply"></i> batal </a>
+                        <a class="btn btn-primary" href="homepage.php?p=data_mahasiswa"><i class="fa fa-mail-reply"></i> batal </a>
                     </div>
                     </form>
                     <?php
-                        $x1 = trim ($_POST['nidn']);
+                        $x1 = trim ($_POST['nim']);
                         $x2 = trim ($_POST['nama']);
                         $x3 = trim ($_POST['jenis_kelamin']);
                         $x4 = trim ($_POST['email']);
-                        $x5 = trim ($_POST['jf']);
-                        $x6 = trim ($_POST['js']);
-                        $x7 = trim ($_POST['level']);
-                        $x8 = trim ($_POST['username']);
+                        $x5 = trim ($_POST['prodi']);
+                        $x6 = trim ($_POST['username']);
                         $lokasi_file    = $_FILES['fupload']['tmp_name'];
                         $nama_file      = $_FILES['fupload']['name'];
                         $ukuran_file    = $_FILES['fupload']['size'];
@@ -153,7 +148,7 @@
                         }
                         else{
                             $password=$passlama;
-                            echo "<script language='javascript'>alert('password konfirmasi berbeda');document.location='homepage.php?p=data_dosen';</script>"; 
+                            echo "<script language='javascript'>alert('password konfirmasi berbeda');document.location='homepage.php?p=data_mahasiswa';</script>"; 
                         }
                             
                         if (isset($_POST[simpan])) {
@@ -166,27 +161,27 @@
                                         echo "<strong>Gagal upload! <br>Ukuran Maksimal 100kb, saat ini ukuran file ".$ukuran_file."</strong>";
                                         exit();
                                     }
-                                $q = mysql_query("UPDATE dosen set nidn='$x1',nama_lengkap='$x2',jenis_kelamin='$x3',email='$x4',jabatan_fungsional='$x5',jabatan_struktural='$x6',foto='$nama_file',username='$x8',password='$password',level='$x7' WHERE nidn='$ID' ");
+                                $q = mysql_query("UPDATE mahasiswa set nim='$x1',nama_lengkap='$x2',jenis_kelamin='$x3',email='$x4',program_studi='$x5',foto='$nama_file',username='$x6',password='$password',level='m' WHERE nim='$ID' ");
                                 if($q)
                                     {
-                                        echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=data_dosen';</script>";
+                                        echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=data_mahasiswa';</script>";
                                     }
-                                else
+                                    else
                                     {
-                                        echo "<script language='javascript'>alert('Data Gagal Diubah');document.location='homepage.php?p=data_dosen';</script>"; 
+                                        echo "<script language='javascript'>alert('Data Gagal Diubah');document.location='homepage.php?p=data_mahasiswa';</script>"; 
                                     }
                             }
                             else
                             {
-                                $q = mysql_query("UPDATE dosen set nidn='$x1',nama_lengkap='$x2',jenis_kelamin='$x3',email='$x4',jabatan_fungsional='$x5',jabatan_struktural='$x6',username='$x8',password='$password',level='$x7' WHERE nidn='$ID' ");
-                                    if($q)
-                                        {
-                                            echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=data_dosen';</script>";
-                                        }
-                                    else
-                                        {
-                                            echo "<script language='javascript'>alert('Data Gagal Diubah');document.location='homepage.php?p=data_dosen';</script>"; 
-                                        }
+                                $q = mysql_query("UPDATE mahasiswa set nim='$x1',nama_lengkap='$x2',jenis_kelamin='$x3',email='$x4',program_studi='$x5',username='$x6',password='$password',level='m' WHERE nim='$ID' ");
+                                if($q)
+                                    {
+                                        echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=data_mahasiswa';</script>";
+                                    }
+                                else
+                                    {
+                                        echo "<script language='javascript'>alert('Data Gagal Diubah');document.location='homepage.php?p=data_mahasiswa';</script>"; 
+                                    }
                             }
                         }
                     ?>

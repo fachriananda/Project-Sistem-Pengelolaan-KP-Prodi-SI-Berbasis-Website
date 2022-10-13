@@ -30,7 +30,7 @@
                             <th>Jadwal</th>
                             <th>Tanggal Input</th>
                             <th>Status Kaprodi</th>
-                         
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +49,7 @@
                                     $statusexport = $data['status_judulexpor'];
                                     $statusex = $arSt[$statusexport];
 
-                   
+                      
                         ?>    
                         <tr>
                             <td align="center"><?php echo $no_urut; ?></td>
@@ -62,7 +62,7 @@
                             </td>
                             <td><?php echo "$jtgl" ?></td>
                             <td><?php echo "$status" ?><br><?php echo $statusex ?></td>
-                           
+                        
                             <td>        
                                 <a href='homepage.php?p=hapus_jadwal&hapus=<?php echo $data[id_jadwal] ?>' >
                                 <button id='btn_create' class='btn btn-xs btn-danger' data-toggle='tooltip' data-container='body' title='Hapus'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></a>

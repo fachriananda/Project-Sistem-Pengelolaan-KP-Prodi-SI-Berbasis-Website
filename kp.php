@@ -1,4 +1,4 @@
-<!-- <?php //include '../config/koneksi.php'; ?> -->
+<?php include '../config/koneksi.php'; ?>
 
 <section class="content-header">
     <h1> Pengajuan Kerja Praktek </h1>
@@ -38,7 +38,7 @@
                             <th>Status</th>
                             <th>Tanggal Pengajuan</th>
                             <th>Surat Permohonan KP Untuk Mahasiswa</th>
-                            <th>Surat Balasan Instasi KP</th>
+                        
                             <th>Opsi</th>
                         </tr>
                     </thead>
@@ -86,7 +86,7 @@
                                 <td><?php echo $status ?></td>
                                 <td><?php echo $data['tanggal']; ?></td>
                                 <td><?php echo $data['file2']; ?></td>
-                                <td><?php echo $data['file3']; ?></td>
+                              
                                 <td>                                    
                                     <a href='homepage.php?p=pengajuan_kp&pengajuan=<?php echo $data["id_pengajuan"] ?>'>
                                     <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='Pengecekkan & Distribusi'><span class='glyphicon glyphicon-check' aria-hidden='true'></span></button></a><br><br>

@@ -1,3 +1,7 @@
+<?php include '../config/koneksi.php';
+         $sql =  "SELECT * FROM bimbingankp";
+         $result = mysql_query($sql);
+          ?>
 <section class="content-header">
     <h1> Data Bimbingan Kerja Praktek
         <!-- <a href="homepage.php?p=tambah"
@@ -6,7 +10,7 @@
         </a> -->
     </h1>
     <br>
-    <a href="?p=eksport" style=""><button type="button" class="btn btn-primary">Eksport Data</button></a>
+   
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Kerja Praktek</li>
@@ -21,8 +25,7 @@
             <div class="row-fluid" style="overflow:auto">
 
                 <?php
-                $sql =  "SELECT * FROM bimbingankp";
-                $result = mysql_query($sql);
+       
                 $no_urut = 1;
                 ?>
 
@@ -40,6 +43,7 @@
                             <th>Status KP</th>
                             <th>Status Bimbingan</th>
                             <th>Uraian</th>
+                         
                         </tr>
                     </thead>
                     <tbody>
@@ -74,6 +78,7 @@
                                     ?>
                                 </td> -->
                                 <td><?php echo $data['uraian']; ?></td>
+                               
                             </tr>
                         <?php
                             $no_urut++;

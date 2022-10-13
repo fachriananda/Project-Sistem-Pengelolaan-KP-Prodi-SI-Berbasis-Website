@@ -1,9 +1,9 @@
 <?php include '../config/koneksi.php'; ?>
 <section class="content-header">      
-    <h1>Surat Balasan Dari Instasi </h1>
+    <h1>Laporan Akhir KP Mahasiswa </h1>
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Surat Balasan Dari Instasi</li>
+        <li class="active">Laporan Akhir KP Mahasiswa</li>
     </ol>
 </section>
 
@@ -16,7 +16,7 @@
                 <div class="col-md-8"></div>
 
                 <?php
-                    $sql =  "SELECT  * FROM surat_instasi ";
+                    $sql =  "SELECT  * FROM laporankp_mhs ";
                     $result = mysql_query($sql);
                     $no_urut = 1;
                 ?>
@@ -28,7 +28,7 @@
                             <th>NIM</th>
                             <th>Nama Lengkap</th>
                             <th>Jenis Kegiatan</th>
-                            <th>file Untuk Prodi dari Instasi</th>
+                            <th>file Untuk Prodi dari Mahasiswa</th>
                             <th>Tanggal Input</th>
                             <th>Download</th>
                           
@@ -71,11 +71,11 @@
                             <td><?php echo $data ['jenis_laporan']; ?></td>
                             </td>
                             <td>
-                            <?php echo $data ['file3']; ?>
+                            <?php echo $data ['file5']; ?>
                             </td>	
                             <td><?php echo $data ['tgl_input']; ?></td>
 
-                                <td><?php echo " <a href='../mahasiswa/file/$data[file3]'>";?>
+                                <td><?php echo " <a href='../mahasiswa/file/$data[file5]'>";?>
                                 <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='Download File'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button></a>                               
                               </td>                        
                              

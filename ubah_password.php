@@ -1,10 +1,13 @@
-
+<?php include '../config/koneksi.php'; ?>
 <?php
-session_start();
-$ID = $_SESSION['username'];
-$passlama= $_SESSION['password'];
-
+    session_start();
+    $ID = $_SESSION['username'];
+    $passlama= $_SESSION['password'];
+    $sql = mysql_query("SELECT * FROM admin WHERE username ='$ID'");
+    $data=mysql_fetch_array($sql);
+    $foto=$data['foto'];
 ?>
+
 <section class="content-header">      
     <h1> Ubah Password</h1>
     <ol class="breadcrumb">
@@ -35,7 +38,7 @@ $passlama= $_SESSION['password'];
                                     <label for="repass" class="control-label">Konfirmasi Password</label>
                                     <input class="form-control" id="repass" name="repass" type="password" placeholder="Konfirmasi password">
                                 </div>
-                            </div>      
+                            </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" name="simpan" class="btn btn-primary"><i class="fa fa-check"></i> simpan</button>
@@ -44,6 +47,8 @@ $passlama= $_SESSION['password'];
                     </div>
                     </form>
                     <?php
+                        $lokasi_file    = $_FILES['fupload']['tmp_name'];
+                        $nama_file      = $_FILES['fupload']['name'];
                         $pass = $_POST['password'];
                         $repass = $_POST['repass'];
                         if($pass==NULL)
@@ -53,7 +58,7 @@ $passlama= $_SESSION['password'];
                         }
                         else if($pass==$repass)
                         {
-                            $password = password_hash($pass, PASSWORD_DEFAULT);
+                            $password = md5($pass);
                             $flag ="Password Diganti";
                         }
                         else{
@@ -61,7 +66,7 @@ $passlama= $_SESSION['password'];
                             echo "<script language='javascript'>alert('password konfirmasi berbeda');document.location='homepage.php?p=ubah_password';</script>"; 
                         }
                         if (isset($_POST[simpan])) {
-                            $q = mysql_query("UPDATE dosen SET password ='$password' WHERE nidn = '$ID' ");
+                            $q = mysql_query("UPDATE admin SET password='$password' WHERE username = '$ID' ");
                             if($q){
                                 echo "<script language='javascript'>alert('Data Berhasil Diubah');document.location='homepage.php?p=dashboard';</script>";
                             }

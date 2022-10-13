@@ -1,5 +1,8 @@
+<?php include '../config/koneksi.php'; ?>
+
+
 <section class="content-header">
-    <h1> Bimbingan Kerja Praktek
+    <h1> Data Bimbingan Kerja Praktek
         <!-- <a href="homepage.php?p=tambah"
             id='btn_add_new_data' class="btn btn-sm btn-success" title="Add Data">
                 <i class="fa fa-plus-circle"></i> Add Data
@@ -7,40 +10,42 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="homepage.php?p=dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Bimbingan Kerja Praktek</li>
+        <li class="active">Data Bimbingan Kerja Praktek</li>
     </ol>
-    <br>
-<!--   <a href="?p=selesai_kp"><button type="button" class="btn btn-primary">Data Mahasiswa Selesai KP</button></a> -->
-    <a href="?p=eksport"><button type="button" class="btn btn-primary">Eksport Data</button></a>
 </section>
 
 <!-- Main content -->
 <section class="content">
-    <?php $nama_dosen = $_SESSION['nama_do']; ?>
     <!-- quick email widget -->
     <div class="box box-info">
         <div class="box-header">
             <div class="row-fluid" style="overflow:auto">
+                <!-- <div class="col-md-8"> -->
+                <!-- <a href="homepage.php?p=add_bimbingan_kp"
+            id='btn_add_new_data' class="btn btn-sm btn-success" title="Add Data">
+                <i class="fa fa-plus-circle"></i> Tambah</a> -->
+                <!-- <a href="homepage.php?p=add_admin" id="btn_create" class='btn btn-success'><span class='glyphicon glyphicon-plus'></span> Tambah </a> -->
+                <!-- </div><br/><br/><br/> -->
 
                 <?php
-                $sql =  "SELECT * FROM bimbingankp WHERE NOT status_kp = 'SELESAI' AND dosen_pembimbing = '$nama_dosen' ORDER BY tgl_input DESC";
+                $sql =  "SELECT * FROM bimbingankp";
                 $result = mysql_query($sql);
                 $no_urut = 1;
                 ?>
 
-                <table id="tabelexport" class="table table-striped table-bordered table-hover">
+                <table id="tabelkp" class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>NIM</th>
                             <th>Nama Mahasiswa</th>
                             <th>Program Studi</th>
-                            <th>Dosen Pembimbing</th>
+                            <th>Dosbing</th>
                             <th>Tanggal Input</th>
                             <th>Semester Mulai KP</th>
                             <th>Semester Selesai KP</th>
                             <th>Aktivitas</th>
-                            <!-- <th>Jenis Laporan</th> -->
+                            <th>Jenis Laporan</th>
                             <th>File</th>
                             <th>Status KP</th>
                             <th>Status Bimbingan</th>
@@ -54,7 +59,7 @@
                         while ($data = mysql_fetch_array($result)) {
                         ?>
                             <tr>
-                                <td align="center"></td>
+                                <td></td>
                                 <td><?php echo $data['nim']; ?></td>
                                 <td><?php echo $data['nama_lengkap']; ?></td>
                                 <td><?php echo $data['program_studi']; ?></td>
@@ -63,37 +68,18 @@
                                 <td><?php echo $data['semester_mulai_kp']; ?></td>
                                 <td><?php echo $data['semester_selesai_kp']; ?></td>
                                 <td><?php echo $data['aktivitas']; ?></td>
+                                <td><?php echo $data['jenis_laporan']; ?></td>
                                 <td><?php echo $data['file']; ?></td>
                                 <td><?php echo $data['status_kp']; ?></td>
-                                <td><?php echo strtoupper($data['status']); ?></td>
-                                <td>
-                                    <?php
-                                    if ($data['tgl_koreksi'] == null) {
-                                        echo "";
-                                    } else {
-                                        echo strftime('%d %B %Y', $data['tgl_koreksi']);
-                                    }
-                                    ?>
-                                </td>
-                                <td><?php echo $data["uraian"]; ?></td>
+                                <td><?php echo $data['status']; ?></td>
+                                <td><?php echo strftime('%d %B %Y', $data['tgl_koreksi']); ?></td>
+                                <td><?php echo $data['uraian']; ?></td>
                                 <td>
                                     <a href='homepage.php?p=edit_bimbingan_kp&ubah=<?php echo $data['id_bimbingan'] ?>'>
-                                        <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='Ubah'>
-                                            <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>
-                                        </button>
-                                    </a>
-                                    <!-- <a href='modular/pdf_open.php?file=<?php //echo $data[file]; 
-                                                                            ?>' target="_blank">
-                                    <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='download'>
-                                       <span class='fa fa-download' aria-hidden='true'></span>
-                                    </button>
-                                </a> -->
-                                    <!-- <a href='../mahasiswa/file/<?php //echo $data[file]; 
-                                                                    ?>' target="_blank">
-                                    <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='download'>
-                                       <span class='fa fa-download' aria-hidden='true'></span>
-                                    </button>
-                                </a> -->
+                                        <button id='btn_create' class='btn btn-xs btn-primary' data-toggle='tooltip' data-container='body' title='Ubah'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
+
+                                    <a href='homepage.php?p=hapus_bimbingan_kp&hapus=<?php echo $data['id_bimbingan'] ?>' onclick="return confirm('Yakin ingin menghapus data?')">
+                                        <button id='btn_create' class='btn btn-xs btn-danger' data-toggle='tooltip' data-container='body' title='Hapus'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></a>
                                 </td>
                             </tr>
                         <?php
@@ -102,20 +88,18 @@
                         ?>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tfoot>
                 </table>
 

@@ -1,4 +1,4 @@
-<?php
+<?php include '../config/koneksi.php';
 	$id =$_GET['pengajuan'];
 	$sql = mysql_query("SELECT * FROM pengajuan WHERE id_pengajuan = '$id'");
 	$data=mysql_fetch_array($sql);
